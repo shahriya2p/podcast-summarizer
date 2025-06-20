@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import PodcastHero from "../../components/PodcastHero";
 import EpisodeCard from "../../components/EpisodeCard";
 import EpisodeModal from "../../components/EpisodeModal";
