@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server';
-import axios from 'axios';
+  import { NextResponse } from 'next/server';
+  import axios from 'axios';
 
 export async function GET() {
   try {
     const response = await axios.get(
-      'https://listen-api-test.listennotes.com/api/v2/search?q=tech&type=episode&sort_by_date=1&len=20'
+      'https://listen-api-test.listennotes.com/api/v2/search?q=tech&type=podcast'
     );
     return NextResponse.json(response.data.results);
   } catch (error) {

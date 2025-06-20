@@ -6,11 +6,12 @@ import axios from 'axios';
 export default function Home() {
   const [podcasts, setPodcasts] = useState([]);
   const [selectedPodcast, setSelectedPodcast] = useState(null);
+  const [episodes, setEpisodes] = useState([]);
+  const [selectedEpisode, setSelectedEpisode] = useState(null);
   const [summary, setSummary] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Fetch podcasts on page load
   useEffect(() => {
     async function fetchPodcasts() {
       try {
@@ -23,28 +24,40 @@ export default function Home() {
     fetchPodcasts();
   }, []);
 
-  // Check for existing summary when a podcast is selected
   useEffect(() => {
     if (selectedPodcast) {
+      async function fetchEpisodes() {
+        try {
+          const response = await axios.get(`/api/podcasts/${selectedPodcast.id}/episodes`);
+          setEpisodes(response.data);
+        } catch (err) {
+          setError('Failed to fetch episodes. Please try again later.');
+        }
+      }
+      fetchEpisodes();
+    }
+  }, [selectedPodcast]);
+
+  useEffect(() => {
+    if (selectedEpisode) {
       async function checkSummary() {
         try {
-          const response = await axios.get(`/api/summaries/${selectedPodcast.id}`);
+          const response = await axios.get(`/api/summaries/${selectedEpisode.id}`);
           setSummary(response.data.summary);
         } catch (err) {
-          setSummary(''); // No existing summary
+          setSummary('');
         }
       }
       checkSummary();
     }
-  }, [selectedPodcast]);
+  }, [selectedEpisode]);
 
-  // Handle Summarize button click
   const handleSummarize = async () => {
-    if (!selectedPodcast) return;
+    if (!selectedEpisode) return;
     setLoading(true);
     setError('');
     try {
-      const response = await axios.post(`/api/summaries/${selectedPodcast.id}`);
+      const response = await axios.post(`/api/summaries/${selectedEpisode.id}`);
       setSummary(response.data.summary);
     } catch (err) {
       setError('Failed to generate summary. Please try again.');
@@ -58,8 +71,7 @@ export default function Home() {
       <div className="container mx-auto p-4">
         <h1 className="text-3xl font-bold mb-6 text-center">Podcast Summarizer</h1>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Podcast List */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <h2 className="text-xl font-semibold mb-4">Available Podcasts</h2>
             <div className="space-y-4 max-h-[80vh] overflow-y-auto">
@@ -76,22 +88,50 @@ export default function Home() {
                 >
                   <h3 className="text-lg font-medium">{podcast.title}</h3>
                   <img
-                    src={podcast.thumbnail}
+                    src={podcast.image}
                     alt={podcast.title}
                     className="w-full h-48 object-cover rounded-md my-2"
                   />
-                  <p className="text-sm text-gray-600">{podcast.podcast.publisher}</p>
+                  <p className="text-sm text-gray-600">{podcast.publisher}</p>
                   <p className="text-sm text-gray-700 truncate">{podcast.description}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Summary Section */}
           <div>
             {selectedPodcast ? (
               <>
-                <h2 className="text-xl font-semibold mb-4">{selectedPodcast.title}</h2>
+                <h2 className="text-xl font-semibold mb-4">Episodes of {selectedPodcast.title}</h2>
+                <div className="space-y-4 max-h-[80vh] overflow-y-auto">
+                  {episodes.length === 0 && !error && (
+                    <p className="text-gray-500">Loading episodes...</p>
+                  )}
+                  {episodes.map((episode) => (
+                    <div
+                      key={episode.id}
+                      className={`cursor-pointer transition-all p-4 border rounded-lg shadow-sm bg-white hover:shadow-md ${
+                        selectedEpisode?.id === episode.id ? 'border-blue-500 border-2' : ''
+                      }`}
+                      onClick={() => setSelectedEpisode(episode)}
+                    >
+                      <h3 className="text-lg font-medium">{episode.title}</h3>
+                      <p className="text-sm text-gray-700 truncate">{episode.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <p className="text-gray-500 text-center mt-10">
+                Select a podcast to view its episodes.
+              </p>
+            )}
+          </div>
+
+          <div>
+            {selectedEpisode ? (
+              <>
+                <h2 className="text-xl font-semibold mb-4">{selectedEpisode.title}</h2>
                 <button
                   onClick={handleSummarize}
                   disabled={loading}
@@ -140,7 +180,7 @@ export default function Home() {
               </>
             ) : (
               <p className="text-gray-500 text-center mt-10">
-                Select a podcast to view or generate a summary.
+                Select an episode to view or generate a summary.
               </p>
             )}
           </div>
