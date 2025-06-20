@@ -1,15 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 import PodcastList from './PodcastList';
-import Navbar from "./components/Navbar";
 import SearchBar from "./components/SearchBar";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-      <Navbar />
       <div className="container mx-auto p-4 flex flex-col items-center">
         {/* Hero Section */}
         <section className="w-full flex flex-col items-center justify-center py-12 mb-8">

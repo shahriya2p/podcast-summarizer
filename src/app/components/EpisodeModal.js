@@ -1,12 +1,9 @@
 import React from "react";
+import PropTypes from 'prop-types';
+import { formatAudioLength } from '../../lib/formatAudioLength';
 
 export default function EpisodeModal({ episode, summary, summaryLoading, summaryError, summarizing, onClose, onSummarize }) {
   if (!episode) return null;
-  const formatAudioLength = (seconds) => {
-    const min = Math.floor(seconds / 60);
-    const sec = seconds % 60;
-    return `${min}:${sec.toString().padStart(2, '0')}`;
-  };
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 transition-opacity duration-200"
@@ -85,4 +82,26 @@ export default function EpisodeModal({ episode, summary, summaryLoading, summary
       </div>
     </div>
   );
-} 
+}
+
+EpisodeModal.propTypes = {
+  episode: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    image: PropTypes.string,
+    thumbnail: PropTypes.string,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    pub_date_ms: PropTypes.number.isRequired,
+    audio_length_sec: PropTypes.number.isRequired,
+    explicit_content: PropTypes.bool,
+    audio: PropTypes.string,
+    link: PropTypes.string,
+    listennotes_url: PropTypes.string,
+  }),
+  summary: PropTypes.string,
+  summaryLoading: PropTypes.bool,
+  summaryError: PropTypes.string,
+  summarizing: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  onSummarize: PropTypes.func.isRequired,
+}; 

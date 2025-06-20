@@ -1,4 +1,5 @@
 import './globals.css';
+import Navbar from './components/Navbar';
 
 export const metadata = {
   title: 'Podcast Summarizer',
@@ -24,7 +25,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="bg-gradient-to-b from-gray-900 to-black text-white min-h-screen">
+        <Navbar />
+        {children}
+      </body>
     </html>
   );
 }

@@ -1,79 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import axios from "axios";
 import PodcastHero from "../../components/PodcastHero";
 import EpisodeCard from "../../components/EpisodeCard";
 import EpisodeModal from "../../components/EpisodeModal";
+import usePodcastDetails from '../../hooks/usePodcastDetails';
+import useEpisodeSummary from '../../hooks/useEpisodeSummary';
+import Loader from "../../components/Loader";
 
 export default function PodcastDetailsPage() {
-  const params = useParams();
-  const { id } = params;
-  const [podcastData, setPodcastData] = useState(null);
-  const [isPodcastLoading, setIsPodcastLoading] = useState(true);
-  const [podcastError, setPodcastError] = useState("");
-  const [selectedEpisode, setSelectedEpisode] = useState(null);
-  const [summary, setSummary] = useState("");
-
-  const [summarizing, setSummarizing] = useState(false);
-  const [summaryError, setSummaryError] = useState("");
-  const [summaryLoading, setSummaryLoading] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    async function fetchPodcast() {
-      try {
-        const response = await axios.get(`/api/podcasts/${id}`);
-        if (!cancelled) {
-          setPodcastData(response.data);
-          setIsPodcastLoading(false);
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setPodcastError("Failed to fetch podcast details. Please try again later.");
-          setIsPodcastLoading(false);
-        }
-      }
-    }
-    if (id) fetchPodcast();
-    return () => { cancelled = true; };
-  }, [id]);
-
-  // Fetch summary for selected episode
-  useEffect(() => {
-    if (!selectedEpisode) return;
-    setSummary("");
-    setSummaryError("");
-    setSummaryLoading(true);
-    axios
-      .get(`/api/summaries/${selectedEpisode.id}`)
-      .then((response) => {
-        setSummary(response.data.summary);
-        setSummaryLoading(false);
-      })
-      .catch(() => {
-        setSummary("");
-        setSummaryLoading(false);
-      });
-  }, [selectedEpisode]);
-
-  const handleSummarize = async () => {
-    if (!selectedEpisode) return;
-    setSummarizing(true);
-    setSummaryError("");
-    try {
-      const response = await axios.post(`/api/summaries/${selectedEpisode.id}`);
-      setSummary(response.data.summary);
-    } catch (err) {
-      setSummaryError("Failed to generate summary. Please try again.");
-    } finally {
-      setSummarizing(false);
-    }
-  };
+  const { id } = useParams();
+  const {
+    podcastData,
+    isPodcastLoading,
+    podcastError,
+  } = usePodcastDetails(id);
+  const {
+    selectedEpisode,
+    setSelectedEpisode,
+    summary,
+    summaryLoading,
+    summaryError,
+    summarizing,
+    handleSummarize,
+    resetSummaryState,
+  } = useEpisodeSummary();
 
   if (isPodcastLoading) {
-    return <div className="text-center py-10">Loading podcast details...</div>;
+    return <Loader message="Loading podcast details..." />;
   }
 
   if (podcastError) {
@@ -112,10 +66,10 @@ export default function PodcastDetailsPage() {
           summaryLoading={summaryLoading}
           summaryError={summaryError}
           summarizing={summarizing}
-          onClose={() => { setSelectedEpisode(null); setSummary(""); setSummaryError(""); }}
-          onSummarize={handleSummarize}
+          onClose={() => { setSelectedEpisode(null); resetSummaryState(); }}
+          onSummarize={() => handleSummarize(selectedEpisode)}
         />
       )}
     </div>
   );
-} 
+}

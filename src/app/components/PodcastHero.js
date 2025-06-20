@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
 export default function PodcastHero({ podcast }) {
   if (!podcast) return null;
@@ -27,4 +28,16 @@ export default function PodcastHero({ podcast }) {
       </div>
     </div>
   );
-} 
+}
+
+PodcastHero.propTypes = {
+  podcast: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    publisher: PropTypes.string,
+    description: PropTypes.string,
+    image: PropTypes.string,
+    thumbnail: PropTypes.string,
+    website: PropTypes.string,
+    extra: PropTypes.object,
+  }),
+}; 

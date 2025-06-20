@@ -1,25 +1,17 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
+import usePodcastList from './hooks/usePodcastList';
+import Loader from './components/Loader';
 
 // PodcastList displays a grid of podcasts as clickable cards. Selecting a podcast navigates to its details page.
 function PodcastList(props) {
-  const [podcasts, setPodcasts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { podcasts, loading } = usePodcastList();
   const router = useRouter();
 
-  useEffect(() => {
-    fetch('/api/podcasts')
-      .then((res) => res.json())
-      .then((data) => {
-        setPodcasts(data.results);
-        setLoading(false);
-      });
-  }, []);
-
   if (loading) {
-    return <div className="text-center py-8 text-gray-300">Loading podcasts...</div>;
+    return <Loader message="Loading podcasts..." />;
   }
 
   return (

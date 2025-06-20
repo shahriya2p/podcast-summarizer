@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
 export default function EpisodeCard({ episode, onClick }) {
   return (
@@ -18,4 +19,16 @@ export default function EpisodeCard({ episode, onClick }) {
       </div>
     </div>
   );
-} 
+}
+
+EpisodeCard.propTypes = {
+  episode: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    image: PropTypes.string,
+    thumbnail: PropTypes.string,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    pub_date_ms: PropTypes.number.isRequired,
+  }).isRequired,
+  onClick: PropTypes.func.isRequired,
+}; 
