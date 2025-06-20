@@ -1,15 +1,16 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-function PodcastList() {
+// PodcastList displays a grid of podcasts as clickable cards. Selecting a podcast navigates to its details page.
+function PodcastList(props) {
   const [podcasts, setPodcasts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [summaries, setSummaries] = useState({});
-  const [summarizing, setSummarizing] = useState({});
+  const router = useRouter();
 
   useEffect(() => {
-    fetch('/api/podcast')
+    fetch('/api/podcasts')
       .then((res) => res.json())
       .then((data) => {
         setPodcasts(data);
@@ -17,46 +18,48 @@ function PodcastList() {
       });
   }, []);
 
-  const handleSummarize = async (podcast) => {
-    setSummarizing((prev) => ({ ...prev, [podcast.id]: true }));
-    const res = await fetch('/api/summarize', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ episodeId: podcast.id, description: podcast.description })
-    });
-    const data = await res.json();
-    setSummaries((prev) => ({ ...prev, [podcast.id]: data.summary }));
-    setSummarizing((prev) => ({ ...prev, [podcast.id]: false }));
-  };
-
   if (loading) {
-    return <div className="text-center py-8">Loading podcasts...</div>;
+    return <div className="text-center py-8 text-gray-300">Loading podcasts...</div>;
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-      {podcasts.map((podcast) => (
-        <div key={podcast.id} className="bg-white rounded-lg shadow p-4 flex flex-col items-center">
-          <img src={podcast.thumbnail} alt={podcast.title} className="w-24 h-24 object-contain mb-4" />
-          <h2 className="text-lg font-semibold mb-1 text-center">{podcast.title}</h2>
-          <p className="text-sm text-gray-500 mb-2 text-center">{podcast.publisher}</p>
-          <p className="text-gray-700 text-center mb-2">{podcast.description}</p>
-          <button
-            className="mt-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
-            onClick={() => handleSummarize(podcast)}
-            disabled={summarizing[podcast.id]}
-          >
-            {summarizing[podcast.id] ? 'Summarizing...' : 'Summarize'}
-          </button>
-          {summaries[podcast.id] && (
-            <div className="mt-4 p-3 bg-gray-100 rounded text-sm text-gray-800 w-full">
-              <strong>Summary:</strong> {summaries[podcast.id]}
+    <div className="relative">
+      {/* Subtle grid background */}
+      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[url('https://www.toptal.com/designers/subtlepatterns/patterns/symphony.png')]" />
+      <div className="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 p-6 z-10">
+        {podcasts.map((podcast) => {
+          const listenScore = podcast.listen_score || podcast.podcast?.listen_score;
+          const title = podcast.title_original || podcast.podcast?.title_original || podcast.title;
+          const publisher = podcast.publisher_original || podcast.podcast?.publisher_original || podcast.publisher;
+          return (
+            <div
+              key={podcast.id}
+              className="bg-gray-800 rounded-xl shadow-lg overflow-hidden flex flex-col items-center cursor-pointer hover:scale-105 transition-transform duration-200 border border-gray-700 hover:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-400 outline-none"
+              onClick={() => router.push(`/podcasts/${podcast.id}`)}
+              tabIndex={0}
+              role="button"
+            >
+              <img
+                src={podcast.image || podcast.thumbnail || podcast.podcast?.image || podcast.podcast?.thumbnail}
+                alt={title || 'Podcast cover'}
+                className="w-32 h-32 object-cover rounded-lg mt-6 mb-4 border-4 border-gray-900 shadow-md"
+              />
+              <div className="px-4 pb-6 w-full flex-1 flex flex-col justify-between">
+                <h2 className="text-xl font-bold mb-1 text-center text-white hover:text-blue-400 transition-colors line-clamp-2">{title}</h2>
+                <p className="text-sm text-gray-400 mb-2 text-center">{publisher}</p>
+                {listenScore !== undefined && (
+                  <p className="text-xs text-blue-400 mb-2 text-center">Listen Score: {listenScore}</p>
+                )}
+                <p className="text-gray-300 text-center text-sm line-clamp-3 mb-2">{podcast.description}</p>
+              </div>
             </div>
-          )}
-        </div>
-      ))}
+          );
+        })}
+      </div>
     </div>
   );
 }
+
+PodcastList.propTypes = {};
 
 export default PodcastList; 
