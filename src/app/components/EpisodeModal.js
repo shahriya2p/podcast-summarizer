@@ -2,8 +2,6 @@ import React from "react";
 
 export default function EpisodeModal({ episode, summary, summaryLoading, summaryError, summarizing, onClose, onSummarize }) {
   if (!episode) return null;
-  console.log("episode", episode);
-  // Helper to format audio length
   const formatAudioLength = (seconds) => {
     const min = Math.floor(seconds / 60);
     const sec = seconds % 60;
@@ -17,11 +15,11 @@ export default function EpisodeModal({ episode, summary, summaryLoading, summary
       role="dialog"
     >
       <div
-        className="bg-gray-900 rounded-xl shadow-2xl max-w-3xl w-full md:p-0 p-2 relative animate-fadeIn overflow-y-auto max-h-[90vh]"
+        className="bg-gray-900 rounded-xl shadow-2xl max-w-5xl w-full md:p-0 p-2 relative animate-fadeIn overflow-y-auto max-h-[90vh]"
         onClick={e => e.stopPropagation()}
       >
         <button
-          className="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl font-bold z-20 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="absolute top-2.5 right-2.5 text-gray-400 hover:text-white text-3xl font-bold z-20 flex items-center justify-center cursor-pointer"
           onClick={onClose}
           aria-label="Close"
           type="button"
@@ -44,7 +42,7 @@ export default function EpisodeModal({ episode, summary, summaryLoading, summary
                 <span className="text-xs text-red-400 mb-1">Explicit</span>
               )}
             </div>
-            <p className="text-gray-300 mb-4 text-sm w-full text-center" dangerouslySetInnerHTML={{ __html: episode.description }} />
+            <div className="text-gray-300 mb-4 text-sm w-full  flex flex-col gap-2" dangerouslySetInnerHTML={{ __html: episode.description }} />
             <audio controls src={episode.audio} className="w-full mb-3" />
             <a
               href={episode.link || episode.listennotes_url}
@@ -57,20 +55,8 @@ export default function EpisodeModal({ episode, summary, summaryLoading, summary
           </div>
           {/* Right: Summary & Options */}
           <div className="md:w-1/2 w-full p-6 md:pl-4 flex flex-col justify-start items-stretch">
-            <button
-              onClick={onSummarize}
-              disabled={summarizing}
-              className={`w-full mb-6 px-4 py-2 text-white rounded-lg transition-colors font-semibold shadow ${summarizing ? "bg-gray-500" : "bg-blue-600 hover:bg-blue-700"}`}
-              style={{ minHeight: 48 }}
-            >
-              {summarizing ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
-                  Generating...
-                </span>
-              ) : "Generate Summary"}
-            </button>
-            <div className="p-4 border rounded-lg  shadow w-full mt-2 mb-2 max-h-60 overflow-y-auto">
+
+            <div className="p-4 border rounded-lg  shadow w-full mt-4 mb-2 h-[calc(100dvh-260px)] overflow-y-auto">
               <h4 className="text-lg font-medium mb-2 text-blue-200">Summary</h4>
               {summaryLoading ? (
                 <p className="text-blue-300 mb-4 flex items-center gap-2"><svg className="animate-spin h-4 w-4 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>Loading summary...</p>
@@ -81,6 +67,19 @@ export default function EpisodeModal({ episode, summary, summaryLoading, summary
               )}
             </div>
             {summaryError && <p className="text-red-400 mt-2">{summaryError}</p>}
+            <button
+                onClick={onSummarize}
+                disabled={summarizing}
+                className={`w-full mb-6 px-4 py-2 text-white rounded-lg transition-colors font-semibold shadow ${summarizing ? "bg-gray-500" : "bg-blue-600 hover:bg-blue-700"}`}
+                style={{ minHeight: 48 }}
+            >
+              {summarizing ? (
+                  <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+                  Generating...
+                </span>
+              ) : "Generate Summary"}
+            </button>
           </div>
         </div>
       </div>

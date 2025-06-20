@@ -24,7 +24,7 @@ export async function POST(req, { params }) {
     }
 
     const response = await axios.get(
-      `https://listen-api-test.listennotes.com/api/v2/episodes/${episodeId}`
+      `${process.env.LISTEN_NOTES_API}/episodes/${episodeId}`
     );
     const episode = response.data;
 
@@ -37,7 +37,7 @@ export async function POST(req, { params }) {
       Summarize the main discussion points, key themes, and insights from the episode, incorporating the podcast's context, episode details, and the full transcript (if available). Focus on the actual content discussed, such as the topics, guests, and lessons shared, rather than just the description. Ensure the summary is engaging, concise, and captures the essence of the episode.
     `;
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: process.env.GEMINI_MODEL??'gemini-1.5-flash' });
     const result = await model.generateContent(prompt);
     const summary = result.response.text();
 

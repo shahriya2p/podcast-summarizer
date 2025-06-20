@@ -5,7 +5,7 @@ export async function GET(req, { params }) {
   try {
     const { id } = await params;
     const response = await axios.get(
-      `https://listen-api-test.listennotes.com/api/v2/podcasts/${id}/episodes`
+      `${process.env.LISTEN_NOTES_API}/podcasts/${id}/episodes`
     );
     return NextResponse.json(response.data.episodes);
   } catch (error) {

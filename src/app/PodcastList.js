@@ -13,7 +13,7 @@ function PodcastList(props) {
     fetch('/api/podcasts')
       .then((res) => res.json())
       .then((data) => {
-        setPodcasts(data);
+        setPodcasts(data.results);
         setLoading(false);
       });
   }, []);
