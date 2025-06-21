@@ -7,6 +7,7 @@ export default function useEpisodeSummary() {
   const [summaryLoading, setSummaryLoading] = useState(false);
   const [summaryError, setSummaryError] = useState('');
   const [summarizing, setSummarizing] = useState(false);
+  const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
     if (!selectedEpisode) return;
@@ -23,6 +24,9 @@ export default function useEpisodeSummary() {
         setSummary('');
         setSummaryLoading(false);
       });
+    return () => {
+      setAnimate(false);
+    };
   }, [selectedEpisode]);
 
   const handleSummarize = async (episode) => {
@@ -31,6 +35,7 @@ export default function useEpisodeSummary() {
     setSummaryError('');
     try {
       const response = await axios.post(`/api/summaries/${episode.id}`);
+      setAnimate(true);
       setSummary(response.data.summary);
     } catch (err) {
       setSummaryError('Failed to generate summary. Please try again.');
@@ -53,5 +58,6 @@ export default function useEpisodeSummary() {
     summarizing,
     handleSummarize,
     resetSummaryState,
+    animate,
   };
 }

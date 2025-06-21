@@ -20,6 +20,7 @@ export default function PodcastDetailsPage() {
     summarizing,
     handleSummarize,
     resetSummaryState,
+    animate,
   } = useEpisodeSummary();
 
   if (isPodcastLoading) {
@@ -33,6 +34,8 @@ export default function PodcastDetailsPage() {
   if (!podcastData) {
     return <div className="text-center py-10">Podcast not found.</div>;
   }
+
+  console.log('selectedEpisode', selectedEpisode);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
@@ -63,6 +66,7 @@ export default function PodcastDetailsPage() {
             resetSummaryState();
           }}
           onSummarize={() => handleSummarize(selectedEpisode)}
+          animate={animate}
         />
       )}
     </div>

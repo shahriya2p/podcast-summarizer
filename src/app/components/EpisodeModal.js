@@ -1,6 +1,9 @@
+'use client';
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { formatAudioLength } from '../../lib/formatAudioLength';
+import TypingText from './TypingText';
 
 export default function EpisodeModal({
   episode,
@@ -10,6 +13,8 @@ export default function EpisodeModal({
   summarizing,
   onClose,
   onSummarize,
+
+  animate,
 }) {
   if (!episode) return null;
   return (
@@ -93,10 +98,13 @@ export default function EpisodeModal({
                       d="M4 12a8 8 0 018-8v8z"
                     ></path>
                   </svg>
-                  Loading summary...
                 </p>
               ) : summary ? (
-                <p className="text-gray-100 whitespace-pre-line">{summary}</p>
+                !animate ? (
+                  <p className="text-gray-100 whitespace-pre-line">{summary}</p>
+                ) : (
+                  <TypingText text={summary}></TypingText>
+                )
               ) : (
                 <p className="text-gray-400 mb-4">No summary available yet.</p>
               )}
