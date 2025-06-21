@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { formatAudioLength } from '../../lib/formatAudioLength';
 import TypingText from './TypingText';
@@ -15,6 +15,29 @@ export default function EpisodeModal({
   onSummarize,
   animate,
 }) {
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    if (episode) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+      
+      // Prevent background scroll
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      
+      // Cleanup function to restore scroll
+      return () => {
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [episode]);
+
   if (!episode) return null;
   return (
     <div
