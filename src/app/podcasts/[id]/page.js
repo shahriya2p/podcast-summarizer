@@ -1,20 +1,16 @@
-"use client";
+'use client';
 
-import { useParams } from "next/navigation";
-import PodcastHero from "../../components/PodcastHero";
-import EpisodeCard from "../../components/EpisodeCard";
-import EpisodeModal from "../../components/EpisodeModal";
+import { useParams } from 'next/navigation';
+import PodcastHero from '../../components/PodcastHero';
+import EpisodeCard from '../../components/EpisodeCard';
+import EpisodeModal from '../../components/EpisodeModal';
 import usePodcastDetails from '../../hooks/usePodcastDetails';
 import useEpisodeSummary from '../../hooks/useEpisodeSummary';
-import Loader from "../../components/Loader";
+import Loader from '../../components/Loader';
 
 export default function PodcastDetailsPage() {
   const { id } = useParams();
-  const {
-    podcastData,
-    isPodcastLoading,
-    podcastError,
-  } = usePodcastDetails(id);
+  const { podcastData, isPodcastLoading, podcastError } = usePodcastDetails(id);
   const {
     selectedEpisode,
     setSelectedEpisode,
@@ -47,11 +43,7 @@ export default function PodcastDetailsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {podcastData.episodes && podcastData.episodes.length > 0 ? (
             podcastData.episodes.map((ep) => (
-              <EpisodeCard
-                key={ep.id}
-                episode={ep}
-                onClick={() => setSelectedEpisode(ep)}
-              />
+              <EpisodeCard key={ep.id} episode={ep} onClick={() => setSelectedEpisode(ep)} />
             ))
           ) : (
             <div className="col-span-full text-center text-gray-400">No episodes found.</div>
@@ -66,7 +58,10 @@ export default function PodcastDetailsPage() {
           summaryLoading={summaryLoading}
           summaryError={summaryError}
           summarizing={summarizing}
-          onClose={() => { setSelectedEpisode(null); resetSummaryState(); }}
+          onClose={() => {
+            setSelectedEpisode(null);
+            resetSummaryState();
+          }}
           onSummarize={() => handleSummarize(selectedEpisode)}
         />
       )}

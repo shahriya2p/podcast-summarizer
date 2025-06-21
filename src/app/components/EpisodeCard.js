@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function EpisodeCard({ episode, onClick }) {
@@ -14,8 +14,13 @@ export default function EpisodeCard({ episode, onClick }) {
       />
       <div className="p-4">
         <h3 className="text-lg font-semibold mb-1 line-clamp-2">{episode.title}</h3>
-        <p className="text-gray-400 text-sm line-clamp-3 mb-2" dangerouslySetInnerHTML={{ __html: episode.description }} />
-        <span className="text-xs text-gray-500">{new Date(episode.pub_date_ms).toLocaleDateString()}</span>
+        <p
+          className="text-gray-400 text-sm line-clamp-3 mb-2"
+          dangerouslySetInnerHTML={{ __html: episode.description }}
+        />
+        <span className="text-xs text-gray-500">
+          {new Date(episode.pub_date_ms).toLocaleDateString()}
+        </span>
       </div>
     </div>
   );
@@ -31,4 +36,4 @@ EpisodeCard.propTypes = {
     pub_date_ms: PropTypes.number.isRequired,
   }).isRequired,
   onClick: PropTypes.func.isRequired,
-}; 
+};

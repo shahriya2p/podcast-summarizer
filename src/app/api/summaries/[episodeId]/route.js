@@ -3,7 +3,7 @@ import dbConnect from '../../../../lib/mongodb';
 import PodcastSummary from '../../../../models/PodcastSummary';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { generateEpisodeSummaryPrompt } from '../../../../lib/promptTemplates';
-import { Client } from "podcast-api"
+import { Client } from 'podcast-api';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -13,10 +13,7 @@ export async function POST(req, { params }) {
     const { episodeId } = await params;
 
     if (!episodeId) {
-      return NextResponse.json(
-        { error: 'Episode ID is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Episode ID is required' }, { status: 400 });
     }
 
     const existingSummary = await PodcastSummary.findOne({ episodeId });
@@ -62,10 +59,7 @@ export async function GET(req, { params }) {
 
     const summary = await PodcastSummary.findOne({ episodeId });
     if (!summary) {
-      return NextResponse.json(
-        { error: 'Summary not found' },
-        { status: 200 }
-      );
+      return NextResponse.json({ error: 'Summary not found' }, { status: 200 });
     }
 
     return NextResponse.json(summary);

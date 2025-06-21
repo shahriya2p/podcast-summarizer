@@ -28,12 +28,14 @@ Discover, explore, and get AI-powered summaries of your favorite podcasts. Searc
 ### Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/yourusername/podcast-summarizer.git
    cd podcast-summarizer
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
@@ -53,6 +55,7 @@ Discover, explore, and get AI-powered summaries of your favorite podcasts. Searc
    > _Replace the values with your actual credentials._
 
 4. **Run the development server:**
+
    ```bash
    npm run dev
    ```
@@ -85,13 +88,13 @@ Discover, explore, and get AI-powered summaries of your favorite podcasts. Searc
 
 ## Environment Variables
 
-| Variable             | Description                        |
-|----------------------|------------------------------------|
-| `MONGODB_URI`        | MongoDB connection string          |
-| `LISTEN_NOTES_API`   | ListenNotes API base URL           |
-| `LISTEN_NOTES_API_KEY` | ListenNotes API key              |
-| `GEMINI_API_KEY`     | Google Gemini API key              |
-| `GEMINI_MODEL`       | Gemini model name (default: gemini-1.5-flash) |
+| Variable               | Description                                   |
+| ---------------------- | --------------------------------------------- |
+| `MONGODB_URI`          | MongoDB connection string                     |
+| `LISTEN_NOTES_API`     | ListenNotes API base URL                      |
+| `LISTEN_NOTES_API_KEY` | ListenNotes API key                           |
+| `GEMINI_API_KEY`       | Google Gemini API key                         |
+| `GEMINI_MODEL`         | Gemini model name (default: gemini-1.5-flash) |
 
 ## Technologies Used
 

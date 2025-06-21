@@ -3,10 +3,12 @@ import Navbar from './components/Navbar';
 
 export const metadata = {
   title: 'Podcast Summarizer',
-  description: 'Discover, explore, and get AI-powered summaries of your favorite podcasts. Search, listen, and stay informed—faster than ever.',
+  description:
+    'Discover, explore, and get AI-powered summaries of your favorite podcasts. Search, listen, and stay informed—faster than ever.',
   openGraph: {
     title: 'Podcast Summarizer',
-    description: 'Discover, explore, and get AI-powered summaries of your favorite podcasts. Search, listen, and stay informed—faster than ever.',
+    description:
+      'Discover, explore, and get AI-powered summaries of your favorite podcasts. Search, listen, and stay informed—faster than ever.',
     url: 'https://yourdomain.com',
     siteName: 'Podcast Summarizer',
     images: [

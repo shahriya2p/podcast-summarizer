@@ -1,11 +1,23 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-export default function Loader({ message = "Loading...", className = "" }) {
+export default function Loader({ message = 'Loading...', className = '' }) {
   return (
     <div className={`flex flex-col items-center justify-center min-h-[40vh] ${className}`}>
-      <svg className="animate-spin h-12 w-12 text-blue-400 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+      <svg
+        className="animate-spin h-12 w-12 text-blue-400 mb-4"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        ></circle>
         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
       </svg>
       <div className="text-xl text-blue-200 font-semibold">{message}</div>
@@ -16,4 +28,4 @@ export default function Loader({ message = "Loading...", className = "" }) {
 Loader.propTypes = {
   message: PropTypes.string,
   className: PropTypes.string,
-}; 
+};

@@ -4,7 +4,7 @@ import axios from 'axios';
 export default function usePodcastDetails(id) {
   const [podcastData, setPodcastData] = useState(null);
   const [isPodcastLoading, setIsPodcastLoading] = useState(true);
-  const [podcastError, setPodcastError] = useState("");
+  const [podcastError, setPodcastError] = useState('');
 
   useEffect(() => {
     let cancelled = false;
@@ -17,14 +17,16 @@ export default function usePodcastDetails(id) {
         }
       } catch (err) {
         if (!cancelled) {
-          setPodcastError("Failed to fetch podcast details. Please try again later.");
+          setPodcastError('Failed to fetch podcast details. Please try again later.');
           setIsPodcastLoading(false);
         }
       }
     }
     if (id) fetchPodcast();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   return { podcastData, isPodcastLoading, podcastError };
-} 
+}

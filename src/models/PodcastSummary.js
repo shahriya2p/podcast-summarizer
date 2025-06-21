@@ -6,4 +6,5 @@ const PodcastSummarySchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.models.PodcastSummary || mongoose.model('PodcastSummary', PodcastSummarySchema);
+export default mongoose.models.PodcastSummary ||
+  mongoose.model('PodcastSummary', PodcastSummarySchema);

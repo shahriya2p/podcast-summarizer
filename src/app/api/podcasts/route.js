@@ -19,12 +19,11 @@ export async function GET(req) {
     });
 
     return NextResponse.json(response.data);
-
   } catch (error) {
     console.error('Error fetching podcasts from Listen Notes:', error);
     return NextResponse.json(
-        { error: 'Failed to fetch podcasts', details: error.message },
-        { status: 500 }
+      { error: 'Failed to fetch podcasts', details: error.message },
+      { status: 500 }
     );
   }
 }
