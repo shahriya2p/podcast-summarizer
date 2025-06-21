@@ -1,12 +1,16 @@
 import { NextResponse } from 'next/server';
-import axios from 'axios';
+import { Client } from 'podcast-api';
 
 export async function GET(req, { params }) {
     try {
         const { id } = await params;
-        const response = await axios.get(
-            `${process.env.LISTEN_NOTES_API}/podcasts/${id}/`
-        );
+        const client = Client({ apiKey: process.env.LISTEN_NOTES_API_KEY });
+
+        const response = await client.fetchPodcastById({
+            id: id,
+            sort: 'recent_first',
+        });
+
         return NextResponse.json(response.data);
     } catch (error) {
         console.error('Error fetching episodes from Listen Notes mock server:', error);

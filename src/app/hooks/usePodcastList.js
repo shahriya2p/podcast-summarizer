@@ -8,7 +8,7 @@ export default function usePodcastList() {
     fetch('/api/podcasts')
       .then((res) => res.json())
       .then((data) => {
-        setPodcasts(data.results);
+        setPodcasts(data.podcasts);
         setLoading(false);
       });
   }, []);

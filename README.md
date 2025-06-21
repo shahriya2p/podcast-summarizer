@@ -77,7 +77,6 @@ Discover, explore, and get AI-powered summaries of your favorite podcasts. Searc
 
 - `GET /api/podcasts` — List podcasts (search/filter supported)
 - `GET /api/podcasts/[id]` — Get details for a specific podcast
-- `GET /api/podcasts/[id]/episodes` — List episodes for a podcast
 
 ### Summaries
 

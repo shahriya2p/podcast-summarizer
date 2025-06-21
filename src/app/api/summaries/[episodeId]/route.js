@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import dbConnect from '../../../../lib/mongodb';
 import PodcastSummary from '../../../../models/PodcastSummary';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import axios from 'axios';
 import { generateEpisodeSummaryPrompt } from '../../../../lib/promptTemplates';
+import { Client } from "podcast-api"
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -24,15 +24,18 @@ export async function POST(req, { params }) {
       return NextResponse.json(existingSummary);
     }
 
-    const response = await axios.get(
-      `${process.env.LISTEN_NOTES_API}/episodes/${episodeId}`
-    );
+    const client = Client({ apiKey: process.env.LISTEN_NOTES_API_KEY });
+
+    const response = await client.fetchEpisodeById({ id: episodeId });
     const episode = response.data;
     const podcast = episode.podcast;
 
     const prompt = generateEpisodeSummaryPrompt({ episode, podcast });
 
-    const model = genAI.getGenerativeModel({ model: process.env.GEMINI_MODEL??'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({
+      model: process.env.GEMINI_MODEL ?? 'gemini-1.5-flash',
+    });
+
     const result = await model.generateContent(prompt);
     const summary = result.response.text();
 
